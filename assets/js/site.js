@@ -150,9 +150,16 @@
       card.className = "yt";
 
       var img = document.createElement("img");
-      img.src = "https://i.ytimg.com/vi/" + v.id + "/hqdefault.jpg";
+      // maxres ist 1280x720 und echtes 16:9; existiert aber nicht zu
+      // jedem Video — dann auf hq zurückfallen (dort mit Balken, die
+      // object-fit: cover wegschneidet).
+      img.src = "https://i.ytimg.com/vi/" + v.id + "/maxresdefault.jpg";
       img.alt = v.title || "Musikvideo";
       img.loading = "lazy";
+      img.addEventListener("error", function onErr() {
+        img.removeEventListener("error", onErr);
+        img.src = "https://i.ytimg.com/vi/" + v.id + "/hqdefault.jpg";
+      });
 
       var btn = document.createElement("button");
       btn.className = "yt__play";
@@ -345,6 +352,25 @@
     var foot = $("#merch-link");
     var sp = CFG.spreadshirt || {};
     var items = sp.items || [];
+
+    // Ohne Produktbilder wirken leere Kacheln wie ein Fehler —
+    // dann lieber ein klarer Aufruf in den Shop.
+    var anyImage = items.some(function (it) { return has(it.image); });
+    if (has(sp.shopUrl) && !anyImage) {
+      var cta = document.createElement("div");
+      cta.className = "merch-cta";
+      var txt = document.createElement("div");
+      txt.className = "merch-cta__txt";
+      var h = document.createElement("h4");
+      h.textContent = "Shirts, Hoodies, Caps";
+      var pp = document.createElement("p");
+      pp.textContent = "Alles im Shop — Druck und Versand laufen über Spreadshirt.";
+      txt.appendChild(h); txt.appendChild(pp);
+      cta.appendChild(txt);
+      cta.appendChild(linkBtn(sp.shopUrl, "SHOP ÖFFNEN"));
+      grid.appendChild(cta);
+      return;
+    }
 
     items.forEach(function (it) {
       var card = document.createElement(has(it.url) || has(sp.shopUrl) ? "a" : "div");

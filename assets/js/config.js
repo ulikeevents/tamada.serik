@@ -18,11 +18,12 @@ window.SITE_CONFIG = {
   /* ---------- 2. YOUTUBE MUSIKVIDEOS ------------------------
      id = der Teil nach "watch?v=" bzw. nach "youtu.be/".       */
   youtube: {
-    channelUrl: "",
+    channelUrl: "https://www.youtube.com/@tamadaserik",
     videos: [
-      { id: "", title: "Musikvideo 1" },
-      { id: "", title: "Musikvideo 2" },
-      { id: "", title: "Musikvideo 3" }
+      { id: "NdftQ9KyrHk", title: "Der Tamada (feat. Dusha)" },
+      { id: "jjkyNF7P40A", title: "Deutsche Russen (feat. Onkel Russia)" },
+      { id: "Re45rw4tdQ0", title: "Saufen oder nicht" },
+      { id: "CnlIAGpCfuA", title: "Казахстан" }
     ]
   },
 
@@ -31,10 +32,10 @@ window.SITE_CONFIG = {
      TikTok:    url = https://www.tiktok.com/@name/video/12345
      thumb:     optionales eigenes Coverbild (empfohlen!)       */
   reels: [
-    { platform: "instagram", url: "", thumb: "", caption: "Виральный клип 1", views: "" },
-    { platform: "tiktok",    url: "", thumb: "", caption: "Viraler Clip 2",  views: "" },
-    { platform: "instagram", url: "", thumb: "", caption: "Viraler Clip 3",  views: "" },
-    { platform: "tiktok",    url: "", thumb: "", caption: "Viraler Clip 4",  views: "" }
+    { platform: "instagram", url: "", thumb: "", caption: "", views: "" },
+    { platform: "tiktok",    url: "", thumb: "", caption: "", views: "" },
+    { platform: "instagram", url: "", thumb: "", caption: "", views: "" },
+    { platform: "tiktok",    url: "", thumb: "", caption: "", views: "" }
   ],
 
   /* ---------- 4. SHOPIFY (Buch + Videogruß) -----------------
@@ -54,7 +55,7 @@ window.SITE_CONFIG = {
   /* ---------- 5. SPREADSHIRT MERCH --------------------------
      Kacheln verlinken direkt in deinen Spreadshirt-Shop.       */
   spreadshirt: {
-    shopUrl: "",   // z.B. "https://tamada-serik.myspreadshop.de"
+    shopUrl: "https://tamada-serik-shop.myspreadshop.de/",
     items: [
       { title: "Uschanka Hoodie", price: "", image: "", url: "" },
       { title: "TAMADA Shirt",    price: "", image: "", url: "" },
@@ -64,14 +65,14 @@ window.SITE_CONFIG = {
 
   /* ---------- 6. KONTAKT & SOCIAL --------------------------- */
   contact: {
-    email: "booking@tamada-serik.de",
+    email: "tamada.serik@proton.me",
     phone: "",
     whatsapp: ""   // internationale Nummer ohne +, z.B. "4915112345678"
   },
   social: {
     instagram: "",
     tiktok: "",
-    youtube: "",
+    youtube: "https://www.youtube.com/@tamadaserik",
     spotify: ""
   }
 };
