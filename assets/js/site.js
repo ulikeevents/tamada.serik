@@ -277,31 +277,84 @@
     });
   }
 
-  /* ================= SHOPIFY =============================== */
-  function initShopify() {
+  /* ================= SHOP: BUCH + VIDEOGRUSS ===============
+     Die Karten entstehen aus der Konfiguration. Der Button führt
+     in den Shopify-Checkout; sobald domain + Token + Produkt-ID
+     hinterlegt sind, ersetzt ihn der Shopify Buy Button und der
+     Kauf läuft ohne Absprung.                                   */
+  function productCard(prod) {
+    var card = document.createElement("article");
+    card.className = "pcard";
+
+    var im = document.createElement("div");
+    im.className = "pcard__img" + (prod.fit === "contain" ? " pcard__img--contain" : "");
+    if (has(prod.image)) setImage(im, prod.image);
+    else im.setAttribute("data-ph", "PRODUKTBILD");
+    card.appendChild(im);
+
+    var body = document.createElement("div");
+    body.className = "pcard__body";
+
+    if (has(prod.tag)) {
+      var tag = document.createElement("p");
+      tag.className = "pcard__tag";
+      tag.textContent = prod.tag;
+      body.appendChild(tag);
+    }
+
+    var h3 = document.createElement("h3");
+    h3.textContent = prod.title || "Produkt";
+    body.appendChild(h3);
+
+    if (has(prod.desc)) {
+      var d = document.createElement("p");
+      d.className = "pcard__desc";
+      d.textContent = prod.desc;
+      body.appendChild(d);
+    }
+
+    if (has(prod.price)) {
+      var pr = document.createElement("p");
+      pr.className = "pcard__price";
+      pr.textContent = prod.price;
+      body.appendChild(pr);
+    }
+
+    var slot = document.createElement("div");
+    slot.className = "buybtn";
+    body.appendChild(slot);
+
+    card.appendChild(body);
+    return { card: card, slot: slot };
+  }
+
+  function initShop() {
+    var grid = $("#shop-grid");
     var sh = CFG.shopify || {};
-    var slots = [
-      { key: "buch", el: $("#buy-buch"), label: "BUCH KAUFEN" },
-      { key: "videogruss", el: $("#buy-videogruss"), label: "VIDEOGRUSS BESTELLEN" }
-    ];
+    var prods = sh.products || {};
+    var order = ["buch", "videogruss"];
 
-    var ready = has(sh.domain) && has(sh.storefrontAccessToken);
+    var slots = [];
+    order.forEach(function (key) {
+      var prod = prods[key];
+      if (!prod) return;
+      var built = productCard(prod);
+      grid.appendChild(built.card);
+      slots.push({ key: key, prod: prod, el: built.slot });
+    });
 
-    if (!ready) {
+    // Ohne Storefront-Zugang: Button führt in den Shop.
+    var linkOut = function () {
       slots.forEach(function (s) {
-        var p = (sh.products || {})[s.key] || {};
-        if (has(p.fallbackUrl)) {
-          s.el.appendChild(linkBtn(p.fallbackUrl, s.label));
-        } else {
-          var b = document.createElement("span");
-          b.className = "btn btn--ghost";
-          b.appendChild(document.createTextNode("SHOPIFY VERBINDEN"));
-          b.setAttribute("aria-disabled", "true");
-          s.el.appendChild(b);
+        s.el.innerHTML = "";
+        if (has(s.prod.fallbackUrl)) {
+          s.el.appendChild(linkBtn(s.prod.fallbackUrl, s.prod.label || "KAUFEN"));
         }
       });
-      return;
-    }
+    };
+
+    if (!has(sh.domain) || !has(sh.storefrontAccessToken)) { linkOut(); return; }
+    linkOut();   // sichtbarer Kaufweg, bis der Buy Button geladen hat
 
     var script = document.createElement("script");
     script.src = "https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js";
@@ -312,23 +365,21 @@
         storefrontAccessToken: sh.storefrontAccessToken
       }));
       slots.forEach(function (s) {
-        var p = (sh.products || {})[s.key] || {};
-        if (!has(p.id)) return;
+        if (!has(s.prod.id)) return;
+        s.el.innerHTML = "";
         ui.createComponent("product", {
-          id: p.id,
+          id: s.prod.id,
           node: s.el,
           options: {
             product: {
-              contents: { img: false, title: false, price: true },
-              text: { button: s.label },
+              contents: { img: false, title: false, price: false },
+              text: { button: s.prod.label || "KAUFEN" },
               styles: {
                 button: {
                   "background-color": "#e10600", "border-radius": "4px",
                   "font-family": "Anton, sans-serif", "text-transform": "uppercase",
                   "letter-spacing": "0.06em", ":hover": { "background-color": "#ff1a10" }
-                },
-                price: { color: "#ffffff", "font-size": "20px" },
-                compareAt: { color: "#a5a5aa" }
+                }
               }
             },
             cart: { styles: { button: { "background-color": "#e10600" } } },
@@ -337,12 +388,7 @@
         });
       });
     };
-    script.onerror = function () {
-      slots.forEach(function (s) {
-        var p = (sh.products || {})[s.key] || {};
-        if (has(p.fallbackUrl)) s.el.appendChild(linkBtn(p.fallbackUrl, s.label));
-      });
-    };
+    // Bei Ladefehler bleiben die Shop-Links stehen.
     document.head.appendChild(script);
   }
 
@@ -509,7 +555,7 @@
     initYouTube();
     initReels();
     initLightbox();
-    initShopify();
+    initShop();
     initMerch();
     initContact();
     initForm();

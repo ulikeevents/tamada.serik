@@ -38,18 +38,23 @@ Einfach den Link zum Reel bzw. Video eintragen. Die Seite baut daraus den Player
 `assets/img/reel-1.jpg`) — Instagram und TikTok liefern keine frei nutzbaren
 Vorschaubilder aus.
 
-### 4. Shopify (Buch + Videogruß)
-1. Im Shopify-Admin: *Einstellungen → Apps → Apps und Vertriebskanäle entwickeln*
-   → App erstellen → **Storefront API** aktivieren → Token kopieren.
-2. `domain` (`deinshop.myshopify.com`) und `storefrontAccessToken` in `config.js`.
-3. Produkt-ID = die lange Zahl in der Admin-URL des Produkts
-   (`…/products/**7891234567890**`).
+### 4. Shop: Buch + Videogruß
+Beide Produkte stehen mit Titel, Preis, Bild und Link in `config.js`.
+Der Button führt in den Shopify-Checkout.
 
-Der Token ist ein *Storefront*-Token — er ist öffentlich gedacht, hat nur Lesezugriff
-und darf im Code stehen. **Kein Admin-API-Token verwenden.**
+**Warum kein Warenkorb auf der Seite?** Der Shopify-**Starter**-Plan gibt die
+Storefront API nicht frei (der Headless-Kanal meldet „nicht kompatibel"). Dafür
+wäre mindestens der Basic-Plan nötig — rund 30 € statt 5 € im Monat. Bei zwei
+Produkten lohnt das nicht: Der Unterschied für den Käufer ist ein Klick.
 
-Solange nichts eingetragen ist, kannst du unter `fallbackUrl` einfach den direkten
-Produktlink hinterlegen — dann führt der Button in deinen Shop.
+**Umstieg später**, ab Basic: Headless-Kanal installieren, Storefront zu erstellen,
+dann in `config.js` nur `domain`, `storefrontAccessToken` und pro Produkt die `id`
+eintragen. Der Code schaltet dann von selbst auf den Buy Button mit Warenkorb um —
+am Rest ändert sich nichts.
+
+Produktbilder liegen unter `assets/img/shop/` im Repo statt bei Shopify. Das ist
+schneller und vermeidet einen Fremdabruf bei jedem Seitenaufruf. Ändert sich ein
+Produktfoto im Shop, muss es hier ersetzt werden.
 
 ### 5. Spreadshirt (Merch)
 Spreadshirt bietet keinen Warenkorb zum Einbetten wie Shopify. Deshalb: schicke

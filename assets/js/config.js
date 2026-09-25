@@ -38,17 +38,39 @@ window.SITE_CONFIG = {
     { platform: "tiktok",    url: "", thumb: "", caption: "", views: "" }
   ],
 
-  /* ---------- 4. SHOPIFY (Buch + Videogruß) -----------------
-     domain  = deine .myshopify.com Domain
-     token   = Storefront API Access Token (ist öffentlich,
-               darf im Code stehen — nur Lesezugriff)
-     productId = die lange Zahl aus der Produkt-URL im Admin    */
+  /* ---------- 4. SHOP: BUCH + VIDEOGRUSS --------------------
+     Aktuell führen die Buttons direkt in den Shopify-Checkout.
+     Der Starter-Plan erlaubt keinen Warenkorb auf dieser Seite.
+
+     Später, ab Shopify Basic: domain + storefrontAccessToken
+     ausfüllen und pro Produkt die id eintragen — dann läuft der
+     Kauf ohne Absprung. Sonst ändert sich nichts.              */
   shopify: {
-    domain: "",                    // z.B. "tamada-serik.myshopify.com"
+    domain: "",
     storefrontAccessToken: "",
     products: {
-      buch:      { id: "", fallbackUrl: "" },
-      videogruss:{ id: "", fallbackUrl: "" }
+      buch: {
+        id: "",
+        title: "Die Bucket List für Aussiedler",
+        desc: "57 krasse Aufgaben, um ein wahrer Aussiedler zu werden — und zu bleiben.",
+        tag: "BUCH",
+        price: "14,90 €",
+        image: "assets/img/shop/buch.png",
+        fit: "contain",
+        label: "BUCH KAUFEN",
+        fallbackUrl: "https://msxnyc-ad.myshopify.com/products/die-bucket-list-fur-aussiedler-57-krasse-aufgaben-um-ein-wahrer-aussiedler-zu-werden-und-zu-bleiben-ideal-als-geschenk"
+      },
+      videogruss: {
+        id: "",
+        title: "Personalisiertes Gruß-Video",
+        desc: "Geburtstag, Hochzeit, Rache — ich sag's deinen Leuten persönlich. Mit Namen.",
+        tag: "PERSÖNLICH",
+        price: "50,00 €",
+        image: "assets/img/shop/videogruss.jpg",
+        fit: "cover",
+        label: "VIDEOGRUSS BESTELLEN",
+        fallbackUrl: "https://msxnyc-ad.myshopify.com/products/personalisierter-namens-song-video"
+      }
     }
   },
 
